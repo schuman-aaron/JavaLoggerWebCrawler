@@ -58,33 +58,155 @@ public class WebCrawlerTest {
 	
 	@Mock
 	Elements mockElements;
+	
+	@Mock
+	Elements mockReturnElements;
 
 	@Mock
 	Element mockElement;
 	
 	@Mock
-	Iterable<Elements> mockIterable;
+	Iterable<Elements> mockElementsIterable;
 	
 	@Mock
-	Iterator<Elements> mockIterator;
+	Iterator<Elements> mockElementsIterator;
 	
-	Elements returnElements;
+	@Mock
+	Iterator<Element> mockElementIterator;
 	
 	
 	@Before
 	public void Setup() {
 		mockElements = mock(Elements.class);
 		mockElement = mock(Element.class);
-		mockIterable = mock(Iterable.class);
+		mockElementsIterable = mock(Iterable.class);
+		mockElementsIterator = mock(Iterator.class);
+		mockElementIterator = mock(Iterator.class);
+		mockReturnElements = mock(Elements.class);
+	}
+
+	@Test
+	public void testSearchWebPageByAttributeSuccess() {
+		searchWebPageByAttributeDefaultSettings();
+		WebCrawler.searchWebPageByAttributeSuccess(mockElementsIterable, mockReturnElements, getDefaultString());
+		verify(mockElementsIterable, times(1)).iterator();
+		verify(mockElementsIterator, times(2)).hasNext();
+		verify(mockElementsIterator, times(1)).next();
+		verify(mockElements, times(1)).iterator();
+		verify(mockElementIterator, times(2)).hasNext();
+		verify(mockElementIterator, times(1)).next();
+		verify(mockElement, times(1)).getElementsByAttribute(anyString());
+		verify(mockReturnElements, times(1)).addAll(any(Elements.class));
 	}
 	
 	@Test
-	public void testSearchWebPageByAttributeSuccess() {
-		
+	public void testSearchWebPageByAttributeIterableNullPointerFailure() {
+		searchWebPageByAttributeDefaultSettings();
+		try {
+			WebCrawler.searchWebPageByAttributeSuccess(null, mockReturnElements, getDefaultString());
+			throw new AssertionError("Unexpected successful execution");
+		} catch(NullPointerException e) {
+			verify(mockElementsIterable, times(0)).iterator();
+			verify(mockElementsIterator, times(0)).hasNext();
+			verify(mockElementsIterator, times(0)).next();
+			verify(mockElements, times(0)).iterator();
+			verify(mockElementIterator, times(0)).hasNext();
+			verify(mockElementIterator, times(0)).next();
+			verify(mockElement, times(0)).getElementsByAttribute(anyString());
+			verify(mockReturnElements, times(0)).addAll(any(Elements.class));
+		}
 	}
 	
-	private void SearchWebPageByAttributeDefaultSettings() {
-		when(mockIterable.iterator()).thenReturn(mockIterator);
+	@Test
+	public void testSearchWebPageByAttributeElementsAddsAllNullPointerFailure() {
+		searchWebPageByAttributeDefaultSettings();
+		when(mockReturnElements.addAll(any(Elements.class))).thenThrow(new NullPointerException());
+		try {
+			WebCrawler.searchWebPageByAttributeSuccess(mockElementsIterable, mockReturnElements, getDefaultString());
+			throw new AssertionError("Unexpected successful execution");
+		} catch(NullPointerException e) {
+			verify(mockElementsIterable, times(1)).iterator();
+			verify(mockElementsIterator, times(1)).hasNext();
+			verify(mockElementsIterator, times(1)).next();
+			verify(mockElements, times(1)).iterator();
+			verify(mockElementIterator, times(1)).hasNext();
+			verify(mockElementIterator, times(1)).next();
+			verify(mockElement, times(1)).getElementsByAttribute(anyString());
+			verify(mockReturnElements, times(1)).addAll(any(Elements.class));
+		}
 	}
 	
+	private void searchWebPageByAttributeDefaultSettings() {
+		when(mockElementsIterable.iterator()).thenReturn(mockElementsIterator);
+		when(mockElementsIterator.hasNext()).thenReturn(true).thenReturn(false);
+		when(mockElementsIterator.next()).thenReturn(mockElements);
+		when(mockElements.iterator()).thenReturn(mockElementIterator);
+		when(mockElementIterator.hasNext()).thenReturn(true).thenReturn(false);
+		when(mockElementIterator.next()).thenReturn(mockElement);
+		when(mockReturnElements.addAll(any(Elements.class))).thenReturn(true);
+		when(mockElement.getElementsByAttribute(anyString())).thenReturn(mockElements);
+	}
+	
+	
+	@Test
+	public void testSearchWebPageContainingTextSuccess() {
+		searchWebPageContainingTextDefaultSettings();
+		WebCrawler.searchWebPageContainingText(mockElementsIterable, mockReturnElements, getDefaultString());
+		verify(mockElementsIterable, times(1)).iterator();
+		verify(mockElementsIterator, times(2)).hasNext();
+		verify(mockElementsIterator, times(1)).next();
+		verify(mockElements, times(1)).iterator();
+		verify(mockElementIterator, times(2)).hasNext();
+		verify(mockElementIterator, times(1)).next();
+		verify(mockElement, times(1)).getElementsContainingText(anyString());
+		verify(mockReturnElements, times(1)).addAll(any(Elements.class));
+	}
+	
+	@Test
+	public void testSearchWebPageContainingTextIterableNullPointerFailure() {
+		searchWebPageContainingTextDefaultSettings();;
+		try {
+			WebCrawler.searchWebPageContainingText(null, mockReturnElements, getDefaultString());
+			throw new AssertionError("Unexpected successful execution");
+		} catch(NullPointerException e) {
+			verify(mockElementsIterable, times(0)).iterator();
+			verify(mockElementsIterator, times(0)).hasNext();
+			verify(mockElementsIterator, times(0)).next();
+			verify(mockElements, times(0)).iterator();
+			verify(mockElementIterator, times(0)).hasNext();
+			verify(mockElementIterator, times(0)).next();
+			verify(mockElement, times(0)).getElementsContainingText(anyString());
+			verify(mockReturnElements, times(0)).addAll(any(Elements.class));
+		}
+	}
+	
+	@Test
+	public void testSearchWebPageContainingTextElementsAddsAllNullPointerFailure() {
+		searchWebPageByAttributeDefaultSettings();
+		when(mockReturnElements.addAll(any(Elements.class))).thenThrow(new NullPointerException());
+		try {
+			WebCrawler.searchWebPageByAttributeSuccess(mockElementsIterable, mockReturnElements, getDefaultString());
+			throw new AssertionError("Unexpected successful execution");
+		} catch(NullPointerException e) {
+			verify(mockElementsIterable, times(1)).iterator();
+			verify(mockElementsIterator, times(1)).hasNext();
+			verify(mockElementsIterator, times(1)).next();
+			verify(mockElements, times(1)).iterator();
+			verify(mockElementIterator, times(1)).hasNext();
+			verify(mockElementIterator, times(1)).next();
+			verify(mockElement, times(1)).getElementsContainingText(anyString());
+			verify(mockReturnElements, times(1)).addAll(any(Elements.class));
+		}
+	}
+	
+	private void searchWebPageContainingTextDefaultSettings() {
+		when(mockElementsIterable.iterator()).thenReturn(mockElementsIterator);
+		when(mockElementsIterator.hasNext()).thenReturn(true).thenReturn(false);
+		when(mockElementsIterator.next()).thenReturn(mockElements);
+		when(mockElements.iterator()).thenReturn(mockElementIterator);
+		when(mockElementIterator.hasNext()).thenReturn(true).thenReturn(false);
+		when(mockElementIterator.next()).thenReturn(mockElement);
+		when(mockReturnElements.addAll(any(Elements.class))).thenReturn(true);
+		when(mockElement.getElementsContainingText(anyString())).thenReturn(mockElements);
+	}
 }

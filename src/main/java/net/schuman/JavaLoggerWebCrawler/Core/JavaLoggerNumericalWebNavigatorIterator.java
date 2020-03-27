@@ -2,6 +2,7 @@ package net.schuman.JavaLoggerWebCrawler.Core;
 
 import java.io.IOException;
 import java.util.Iterator;
+import java.util.NoSuchElementException;
 import java.util.logging.Logger;
 
 import org.jsoup.Jsoup;
@@ -55,8 +56,7 @@ public class JavaLoggerNumericalWebNavigatorIterator implements Iterator<Element
 			}
 			return currentDocument.select(tag);
 		} catch (Exception e) {
-			logger.finer(e.getMessage());
-			return null;
+			throw new NoSuchElementException(e.getMessage());
 		}
 	}
 
