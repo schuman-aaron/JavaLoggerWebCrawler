@@ -88,7 +88,7 @@ public class WebCrawlerTest {
 	@Test
 	public void testSearchWebPageByAttributeSuccess() {
 		searchWebPageByAttributeDefaultSettings();
-		WebCrawler.searchWebPageByAttributeSuccess(mockElementsIterable, mockReturnElements, getDefaultString());
+		WebCrawler.searchWebPageByAttribute(mockElementsIterable, mockReturnElements, getDefaultString());
 		verify(mockElementsIterable, times(1)).iterator();
 		verify(mockElementsIterator, times(2)).hasNext();
 		verify(mockElementsIterator, times(1)).next();
@@ -103,7 +103,7 @@ public class WebCrawlerTest {
 	public void testSearchWebPageByAttributeIterableNullPointerFailure() {
 		searchWebPageByAttributeDefaultSettings();
 		try {
-			WebCrawler.searchWebPageByAttributeSuccess(null, mockReturnElements, getDefaultString());
+			WebCrawler.searchWebPageByAttribute(null, mockReturnElements, getDefaultString());
 			throw new AssertionError("Unexpected successful execution");
 		} catch(NullPointerException e) {
 			verify(mockElementsIterable, times(0)).iterator();
@@ -122,7 +122,7 @@ public class WebCrawlerTest {
 		searchWebPageByAttributeDefaultSettings();
 		when(mockReturnElements.addAll(any(Elements.class))).thenThrow(new NullPointerException());
 		try {
-			WebCrawler.searchWebPageByAttributeSuccess(mockElementsIterable, mockReturnElements, getDefaultString());
+			WebCrawler.searchWebPageByAttribute(mockElementsIterable, mockReturnElements, getDefaultString());
 			throw new AssertionError("Unexpected successful execution");
 		} catch(NullPointerException e) {
 			verify(mockElementsIterable, times(1)).iterator();
@@ -185,7 +185,7 @@ public class WebCrawlerTest {
 		searchWebPageByAttributeDefaultSettings();
 		when(mockReturnElements.addAll(any(Elements.class))).thenThrow(new NullPointerException());
 		try {
-			WebCrawler.searchWebPageByAttributeSuccess(mockElementsIterable, mockReturnElements, getDefaultString());
+			WebCrawler.searchWebPageByAttribute(mockElementsIterable, mockReturnElements, getDefaultString());
 			throw new AssertionError("Unexpected successful execution");
 		} catch(NullPointerException e) {
 			verify(mockElementsIterable, times(1)).iterator();
