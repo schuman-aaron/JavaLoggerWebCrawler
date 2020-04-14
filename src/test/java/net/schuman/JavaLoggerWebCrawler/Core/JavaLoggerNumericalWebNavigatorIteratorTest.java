@@ -92,129 +92,96 @@ public class JavaLoggerNumericalWebNavigatorIteratorTest {
 		mockConnection = mock(Connection.class);
 		PowerMockito.mockStatic(Jsoup.class, Mockito.RETURNS_MOCKS);
 		
-		webNavigatorIterator = new JavaLoggerNumericalWebNavigatorIterator(getDefaultString(), getDefaultString(), getDefaultString(), getDefaultInt(), mockLogger, mockMethodLoggerFactory);
+		webNavigatorIterator = new JavaLoggerNumericalWebNavigatorIterator(getDefaultString(), getDefaultString(), getDefaultString(), getDefaultInt(), getDefaultInt(), mockLogger, mockMethodLoggerFactory);
 		webNavigatorIterator.setCurrentDocument(mockCurrentDocument);
 		webNavigatorIterator.setNextDocument(mockNextDocument);
 		webNavigatorIterator.setUri(mockString);
 	}
 	
 	@Test
-	public void testBuildAndSetNextWebPageSuccess() {
+	public void testSetNextWebPageSuccess() {
 		try {
 			buildAndSetWebPageDefaultSettings();
-			webNavigatorIterator.buildAndSetNextWebPage(mockNextDocument);
+			webNavigatorIterator.setNextWebPage(DocumentEnumeration.NEXT_DOCUMENT);
 			verify(mockMethodLoggerFactory, times(1)).createMethodLoggerAndLogEntry(anyString());
-			verify(mockString, times(1)).replace(anyInt(), anyInt(), anyString());
 			//PowerMockito.verifyStatic(Jsoup.class, times(1));
 			Jsoup.connect(getDefaultString());
 			verify(mockConnection, times(1)).get();
-			assertTrue("Unexpected iterated value.\nExpected: " + (getDefaultInt() + 1) + "\nActual: " +  webNavigatorIterator.getIteratedValue(),webNavigatorIterator.getIteratedValue() == getDefaultInt() + 1);
 		} catch (Exception e) {
 			throw new AssertionError(e.getMessage());
 		}
 	}
 	
 	@Test
-	public void testBuildAndSetNextWebPageStringIndexOutOfBoundsFailure() {
-		try {
-			buildAndSetWebPageDefaultSettings();
-			when(mockString.replace(anyInt(), anyInt(), anyString())).thenThrow(new IndexOutOfBoundsException());
-			webNavigatorIterator.buildAndSetNextWebPage(mockNextDocument);
-		} catch (IndexOutOfBoundsException e) {
-			verify(mockMethodLoggerFactory, times(1)).createMethodLoggerAndLogEntry(anyString());
-			//PowerMockito.verifyStatic(Jsoup.class, times(1));
-			Jsoup.connect(getDefaultString());
-			try {
-				verify(mockConnection, times(0)).get();
-			} catch (IOException e1) {
-				throw new AssertionError(e1.getMessage());
-			}
-			assertTrue("Unexpected iterated value.\nExpected: " + (getDefaultInt()) + "\nActual: " +  webNavigatorIterator.getIteratedValue(),webNavigatorIterator.getIteratedValue() == getDefaultInt());
-		} catch (Exception e) {
-			throw new AssertionError(e.getMessage());
-		}
-	}
-	
-	@Test
-	public void testBuildAndSetNextWebPageMalformedUrlFailure() {
+	public void testSetNextWebPageMalformedUrlFailure() {
 		try {
 			buildAndSetWebPageDefaultSettings();
 			when(mockConnection.get()).thenThrow(new MalformedURLException());
-			webNavigatorIterator.buildAndSetNextWebPage(mockNextDocument);
+			webNavigatorIterator.setNextWebPage(DocumentEnumeration.NEXT_DOCUMENT);
 		} catch (MalformedURLException e) {
 			verify(mockMethodLoggerFactory, times(1)).createMethodLoggerAndLogEntry(anyString());
 			//PowerMockito.verifyStatic(Jsoup.class, times(1));
 			Jsoup.connect(getDefaultString());
-			verify(mockString, times(1)).replace(anyInt(), anyInt(), anyString());
-			assertTrue("Unexpected iterated value.\nExpected: " + (getDefaultInt() + 1) + "\nActual: " +  webNavigatorIterator.getIteratedValue(),webNavigatorIterator.getIteratedValue() == getDefaultInt() + 1);
 		} catch (Exception e) {
 			throw new AssertionError(e.getMessage());
 		}
 	}
 	
 	@Test
-	public void testBuildAndSetNextWebPageHttpStatusFailure() {
+	public void testSetNextWebPageHttpStatusFailure() {
 		try {
 			buildAndSetWebPageDefaultSettings();
 			when(mockConnection.get()).thenThrow(new HttpStatusException(getDefaultString(), getDefaultInt(), getDefaultString()));
-			webNavigatorIterator.buildAndSetNextWebPage(mockNextDocument);
+			webNavigatorIterator.setNextWebPage(DocumentEnumeration.NEXT_DOCUMENT);
 		} catch (HttpStatusException e) {
 			verify(mockMethodLoggerFactory, times(1)).createMethodLoggerAndLogEntry(anyString());
 			//PowerMockito.verifyStatic(Jsoup.class, times(1));
 			Jsoup.connect(getDefaultString());
-			verify(mockString, times(1)).replace(anyInt(), anyInt(), anyString());
-			assertTrue("Unexpected iterated value.\nExpected: " + (getDefaultInt() + 1) + "\nActual: " +  webNavigatorIterator.getIteratedValue(),webNavigatorIterator.getIteratedValue() == getDefaultInt() + 1);
 		} catch (Exception e) {
 			throw new AssertionError(e.getMessage());
 		}
 	}
 	
 	@Test
-	public void testBuildAndSetNextWebPageUnsupportedMimeTypeFailure() {
+	public void testSetNextWebPageUnsupportedMimeTypeFailure() {
 		try {
 			buildAndSetWebPageDefaultSettings();
 			when(mockConnection.get()).thenThrow(new UnsupportedMimeTypeException(getDefaultString(), getDefaultString(), getDefaultString()));
-			webNavigatorIterator.buildAndSetNextWebPage(mockNextDocument);
+			webNavigatorIterator.setNextWebPage(DocumentEnumeration.NEXT_DOCUMENT);
 		} catch (UnsupportedMimeTypeException e) {
 			verify(mockMethodLoggerFactory, times(1)).createMethodLoggerAndLogEntry(anyString());
 			//PowerMockito.verifyStatic(Jsoup.class, times(1));
 			Jsoup.connect(getDefaultString());
-			verify(mockString, times(1)).replace(anyInt(), anyInt(), anyString());
-			assertTrue("Unexpected iterated value.\nExpected: " + (getDefaultInt() + 1) + "\nActual: " +  webNavigatorIterator.getIteratedValue(),webNavigatorIterator.getIteratedValue() == getDefaultInt() + 1);
 		} catch (Exception e) {
 			throw new AssertionError(e.getMessage());
 		}
 	}
 	
 	@Test
-	public void testBuildAndSetNextWebPageSocketTimeoutFailure() {
+	public void testSetNextWebPageSocketTimeoutFailure() {
 		try {
 			buildAndSetWebPageDefaultSettings();
 			when(mockConnection.get()).thenThrow(new SocketTimeoutException());
-			webNavigatorIterator.buildAndSetNextWebPage(mockNextDocument);
+			webNavigatorIterator.setNextWebPage(DocumentEnumeration.NEXT_DOCUMENT);
 		} catch (SocketTimeoutException e) {
 			verify(mockMethodLoggerFactory, times(1)).createMethodLoggerAndLogEntry(anyString());
 			//PowerMockito.verifyStatic(Jsoup.class, times(1));
 			Jsoup.connect(getDefaultString());
-			verify(mockString, times(1)).replace(anyInt(), anyInt(), anyString());
-			assertTrue("Unexpected iterated value.\nExpected: " + (getDefaultInt() + 1) + "\nActual: " +  webNavigatorIterator.getIteratedValue(),webNavigatorIterator.getIteratedValue() == getDefaultInt() + 1);
 		} catch (Exception e) {
 			throw new AssertionError(e.getMessage());
 		}
 	}
 	
 	@Test
-	public void testBuildAndSetNextWebPageIOFailure() {
+	public void testSetNextWebPageIOFailure() {
 		try {
 			buildAndSetWebPageDefaultSettings();
 			when(mockConnection.get()).thenThrow(new IOException());
-			webNavigatorIterator.buildAndSetNextWebPage(mockNextDocument);
+			webNavigatorIterator.setNextWebPage(DocumentEnumeration.NEXT_DOCUMENT);
 		} catch (IOException e) {
 			verify(mockMethodLoggerFactory, times(1)).createMethodLoggerAndLogEntry(anyString());
 			//PowerMockito.verifyStatic(Jsoup.class, times(1));
 			Jsoup.connect(getDefaultString());
-			verify(mockString, times(1)).replace(anyInt(), anyInt(), anyString());
-			assertTrue("Unexpected iterated value.\nExpected: " + (getDefaultInt() + 1) + "\nActual: " +  webNavigatorIterator.getIteratedValue(),webNavigatorIterator.getIteratedValue() == getDefaultInt() + 1);
 		} catch (Exception e) {
 			throw new AssertionError(e.getMessage());
 		}
